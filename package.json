@@ -16,10 +16,13 @@
     "deps/**"
   ],
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.10",
     "bindings": "^1.5.0",
+    "node-pre-gyp-github": "^1.4.4",
     "prebuild-install": "^7.1.0"
   },
   "devDependencies": {
+    "aws-sdk": "^2.1296.0",
     "chai": "^4.3.6",
     "cli-color": "^2.0.2",
     "fs-extra": "^10.1.0",
@@ -34,7 +37,8 @@
     }
   },
   "scripts": {
-    "install": "prebuild-install || node-gyp rebuild --release",
+    "install": "node-pre-gyp install --fallback-to-build",
+    "build": "build-release",
     "build-release": "node-gyp rebuild --release",
     "build-debug": "node-gyp rebuild --debug",
     "rebuild-release": "npm run lzz && npm run build-release",
@@ -43,6 +47,12 @@
     "benchmark": "node benchmark",
     "download": "bash ./deps/download.sh",
     "lzz": "lzz -hx hpp -sx cpp -k BETTER_SQLITE3 -d -hl -sl -e ./src/better_sqlite3.lzz"
+  },
+  "binary": {
+    "module_name": "better_sqlite3",
+    "module_path": "./build/Release",
+    "host": "https://github.com/hernanrz/better-sqlite3/releases/download/",
+    "remote_path": "{version}"
   },
   "license": "MIT",
   "keywords": [

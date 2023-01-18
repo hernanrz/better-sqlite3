@@ -1,0 +1,32 @@
+name: Prebuilds
+on:
+  workflow_dispatch:
+
+jobs:
+  prebuild-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install deps
+        run: npm install --ignore-scripts
+      - name: Download litesync
+        shell: powershell
+        run: ./deps/download.ps1
+      - name: Run Prebuild
+        run: npx --no-install prebuild -r node -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0
+      - name: upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: litesync-better-sqlite3-windows
+          path: |
+            prebuilds
+      - name: Make release
+        shell: powershell
+        run: |
+          $Env:NODE_PRE_GYP_GITHUB_TOKEN=$Env:GITHUB_TOKEN
+          npx node-pre-gyp build
+          npx node-pre-gyp package
+          npx node-pre-gyp-github publish
+
+
+

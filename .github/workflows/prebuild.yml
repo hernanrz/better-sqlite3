@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install deps
-        run: npm install
+        run: npm install --ignore-scripts
       - name: Download litesync
         shell: powershell
         run: ./deps/download.ps1

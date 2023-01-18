@@ -64,8 +64,8 @@ jobs:
       matrix:
         os:
           - windows-2019
-          #- ubuntu-18.04
-          #- macos-latest
+          - ubuntu-18.04
+          - macos-latest
     name: Prebuild on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     needs: publish

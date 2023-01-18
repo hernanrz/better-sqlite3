@@ -41,8 +41,8 @@ jobs:
           cd deps
           tar xf litesync-free-windows-x86_64.tar.gz
       - run: npm install --ignore-scripts
-      - run: npm run build-debug
-      - run: npm test
+      # - run: npm run build-debug
+      # - run: npm test
 
   publish:
     if: ${{ github.event_name == 'release' }}

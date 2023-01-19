@@ -51,7 +51,7 @@ jobs:
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:
-          name: prebuild-${{matrix.os}}
+          name: prebuild
           path: prebuilds
 
 
@@ -89,7 +89,7 @@ jobs:
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:
-          name: prebuild-alpine
+          name: prebuild
           path: prebuilds
 
   # Disabling because there's no Alpine+Arm binary for litesync
@@ -139,7 +139,7 @@ jobs:
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:
-          name: prebuild-${{matrix.os}}
+          name: prebuild
           path: prebuilds
   prebuild-linux-armv7:
     strategy:
@@ -162,5 +162,5 @@ jobs:
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:
-          name: prebuild-${{matrix.os}}
+          name: prebuild
           path: prebuilds

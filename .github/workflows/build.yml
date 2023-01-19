@@ -12,7 +12,7 @@ jobs:
         os:
           - windows-2019
           - ubuntu-18.04
-          # - macos-latest
+          - macos-latest
     name: Prebuild on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -28,8 +28,8 @@ jobs:
           sudo bash ./install
       - if: matrix.os == 'macos-latest'
         run: |
-          curl -O https://litesync.io/download/litesync-free-mac-arm64.tar.gz
-          tar xf litesync-free-mac-arm64.tar.gz
+          curl -O https://litesync.io/download/litesync-free-mac-x86_64.tar.gz
+          tar xf litesync-free-mac-x86_64
           sudo sh ./install
       - if: matrix.os == 'windows-2019'
         run: |
@@ -73,7 +73,25 @@ jobs:
       - run: |
           curl -O https://litesync.io/download/litesync-free-linux-alpine.tar.gz
           tar xf litesync-free-linux-alpine.tar.gz
-          sh ./install
+          set -e
+          set -x
+          mkdir -p /usr/local/bin
+          mkdir -p /usr/local/lib
+          mkdir -p /usr/local/include
+          cp liblitesync.so.0.0.1 /usr/local/lib/
+          cd /usr/local/lib
+          ln -sf liblitesync.so.0.0.1 liblitesync.so.0
+          ln -sf liblitesync.so.0 liblitesync.so
+          cd -
+          mkdir -p /usr/local/lib/litesync
+          cd /usr/local/lib/litesync
+          ln -sf ../liblitesync.so.0.0.1 libsqlite3.so.0
+          ln -sf libsqlite3.so.0 libsqlite3.so
+          cd -
+          cp sqlite3.h /usr/local/include/
+          cp sqlite3 /usr/local/bin/
+          ldconfig /etc/ld.so.conf.d
+          echo done
       - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
       - name: Upload prebuild
         uses: actions/upload-artifact@v3

@@ -6,7 +6,7 @@
   "author": "Joshua Wise <joshuathomaswise@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/litesync/better-sqlite3.git"
+    "url": "git://github.com/hernanrz/better-sqlite3.git"
   },
   "main": "lib/index.js",
   "files": [

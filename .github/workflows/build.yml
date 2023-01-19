@@ -39,11 +39,11 @@ jobs:
           tar xf litesync-free-windows-x86_64.tar.gz
       - run: npm install --ignore-scripts
       - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
-      - run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}
+      - run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$'
       - if: matrix.os == 'windows-2019'
-        run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch ia32 -u ${{ secrets.GITHUB_TOKEN }}
+        run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch ia32
       - if: matrix.os == 'macos-latest'
-        run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch arm64 -u ${{ secrets.GITHUB_TOKEN }}
+        run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch arm64
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:
@@ -63,7 +63,7 @@ jobs:
           curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz
           tar xf litesync-free-linux-x86_64.tar.gz
           sudo sh ./install
-      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}
+      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:
@@ -89,7 +89,7 @@ jobs:
           curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz && \
           tar xf litesync-free-linux-x86_64.tar.gz && \
           sudo sh ./install
-          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}"
+          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:
@@ -111,7 +111,7 @@ jobs:
           docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/${{ matrix.arch }} node:16 -c "\
           cd /tmp/project && \
           npm install --ignore-scripts && \
-          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}"
+          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:

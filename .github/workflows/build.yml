@@ -29,7 +29,7 @@ jobs:
       - if: matrix.os == 'macos-latest'
         run: |
           curl -O https://litesync.io/download/litesync-free-mac-x86_64.tar.gz
-          tar xf litesync-free-mac-x86_64
+          tar xf litesync-free-mac-x86_64.tar.gz
           sudo sh ./install
       - if: matrix.os == 'windows-2019'
         run: |
@@ -88,7 +88,7 @@ jobs:
           ln -sf ../liblitesync.so.0.0.1 libsqlite3.so.0
           ln -sf libsqlite3.so.0 libsqlite3.so
           cd -
-          cp sqlite3.h /usr/local/include/
+          cp *.h /usr/local/include/
           cp sqlite3 /usr/local/bin/
           ldconfig /etc/ld.so.conf.d
           echo done

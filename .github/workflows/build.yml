@@ -38,7 +38,7 @@ jobs:
           cd deps
           tar xf litesync-free-windows-x86_64.tar.gz
       - run: npm install --ignore-scripts
-      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
+      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}
       # - run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$'
       # - if: matrix.os == 'windows-2019'
       #   run: |
@@ -48,11 +48,6 @@ jobs:
       #     tar xf litesync-free-windows-x86.tar.gz
       #     cd ..
       #     npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch ia32
-      - name: Upload prebuild
-        uses: actions/upload-artifact@v3
-        with:
-          name: prebuild
-          path: prebuilds
 
 
   prebuild-alpine:
@@ -85,12 +80,7 @@ jobs:
           cp sqlite3 /usr/local/bin/
           ldconfig /etc/ld.so.conf.d
           echo done
-      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
-      - name: Upload prebuild
-        uses: actions/upload-artifact@v3
-        with:
-          name: prebuild
-          path: prebuilds
+      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}
 
   # Disabling because there's no Alpine+Arm binary for litesync
   # prebuild-alpine-arm:
@@ -135,12 +125,7 @@ jobs:
           curl -O https://litesync.io/download/litesync-free-linux-aarch64.tar.gz && \
           tar xf litesync-free-linux-aarch64.tar.gz && \
           sh ./install && \
-          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
-      - name: Upload prebuild
-        uses: actions/upload-artifact@v3
-        with:
-          name: prebuild
-          path: prebuilds
+          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'" -u ${{ secrets.GITHUB_TOKEN }}
   prebuild-linux-armv7:
     strategy:
       matrix:
@@ -158,9 +143,4 @@ jobs:
           curl -O https://litesync.io/download/litesync-free-linux-armv7.tar.gz && \
           tar xf litesync-free-linux-armv7.tar.gz && \
           sh ./install && \
-          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
-      - name: Upload prebuild
-        uses: actions/upload-artifact@v3
-        with:
-          name: prebuild
-          path: prebuilds
+          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'" -u ${{ secrets.GITHUB_TOKEN }}

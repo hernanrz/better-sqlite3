@@ -6,59 +6,6 @@ on:
       - released
   workflow_dispatch: {}
 jobs:
-  # test:
-  #   strategy:
-  #     matrix:
-  #       os:
-  #         - ubuntu-20.04
-  #         - macos-latest
-  #         - windows-2019
-  #       node:
-  #         - 14
-  #         - 16
-  #         - 18
-  #   name: Testing Node ${{ matrix.node }} on ${{ matrix.os }}
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: ${{ matrix.node }}
-  #     - if: matrix.os == 'ubuntu-20.04'
-  #       run: |
-  #         curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz
-  #         tar xf litesync-free-linux-x86_64.tar.gz
-  #         sudo bash ./install
-  #     - if: matrix.os == 'macos-latest'
-  #       run: |
-  #         curl -O https://litesync.io/download/litesync-free-mac-arm64.tar.gz
-  #         tar xf litesync-free-mac-arm64.tar.gz
-  #         sudo sh ./install
-  #     - if: matrix.os == 'windows-2019'
-  #       run: |
-  #         curl.exe -O https://litesync.io/download/litesync-free-windows-x86_64.tar.gz
-  #         cp litesync-free-windows-x86_64.tar.gz deps
-  #         cd deps
-  #         tar xf litesync-free-windows-x86_64.tar.gz
-  #     - run: npm install --ignore-scripts
-      # - run: npm run build-debug
-      # - run: npm test
-
-  # publish:
-  #   if: ${{ github.event_name == 'release' }}
-  #   name: Publishing to NPM
-  #   runs-on: ubuntu-18.04
-  #   needs: test
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 16
-  #         registry-url: https://registry.npmjs.org
-  #     - run: npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
   prebuild:
     strategy:
       matrix:
@@ -91,7 +38,7 @@ jobs:
           cd deps
           tar xf litesync-free-windows-x86_64.tar.gz
       - run: npm install --ignore-scripts
-      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}
+      - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
       - run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' -u ${{ secrets.GITHUB_TOKEN }}
       - if: matrix.os == 'windows-2019'
         run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch ia32 -u ${{ secrets.GITHUB_TOKEN }}
@@ -108,10 +55,9 @@ jobs:
     name: Prebuild on alpine
     runs-on: ubuntu-latest
     container: node:16-alpine
-    # needs: publish
     steps:
       - uses: actions/checkout@v2
-      - run: apk add build-base git python3 --update-cache
+      - run: apk add build-base git python3 curl --update-cache
       - run: npm install --ignore-scripts
       - run: |
           curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz
@@ -132,13 +78,12 @@ jobs:
           - arm64
     name: Prebuild on alpine (${{ matrix.arch }})
     runs-on: ubuntu-latest
-    # needs: publish
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-qemu-action@v1
       - run: |
           docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/${{ matrix.arch }} node:16-alpine -c "\
-          apk add build-base git python3 --update-cache && \
+          apk add build-base git python3 curl --update-cache && \
           cd /tmp/project && \
           npm install --ignore-scripts && \
           curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz && \
@@ -159,7 +104,6 @@ jobs:
           - arm64
     name: Prebuild on Linux (${{ matrix.arch }})
     runs-on: ubuntu-latest
-    # needs: publish
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-qemu-action@v1

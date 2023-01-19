@@ -60,8 +60,8 @@ jobs:
       - run: apk add build-base git python3 curl --update-cache
       - run: npm install --ignore-scripts
       - run: |
-          curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz
-          tar xf litesync-free-linux-x86_64.tar.gz
+          curl -O https://litesync.io/download/litesync-free-linux-alpine.tar.gz
+          tar xf litesync-free-linux-alpine.tar.gz
           sh ./install
       - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
       - name: Upload prebuild
@@ -70,37 +70,36 @@ jobs:
           name: prebuild-alpine
           path: prebuilds
 
-  prebuild-alpine-arm:
-    strategy:
-      matrix:
-        arch:
-          - arm/v7
-          - arm64
-    name: Prebuild on alpine (${{ matrix.arch }})
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: docker/setup-qemu-action@v1
-      - run: |
-          docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/${{ matrix.arch }} node:16-alpine -c "\
-          apk add build-base git python3 curl --update-cache && \
-          cd /tmp/project && \
-          npm install --ignore-scripts && \
-          curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz && \
-          tar xf litesync-free-linux-x86_64.tar.gz && \
-          sh ./install
-          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
-      - name: Upload prebuild
-        uses: actions/upload-artifact@v3
-        with:
-          name: prebuild-alpine-${{matrix.arch}}
-          path: prebuilds
+  # Disabling because there's no Alpine+Arm binary for litesync
+  # prebuild-alpine-arm:
+  #   strategy:
+  #     matrix:
+  #       arch:
+  #         - arm64
+  #   name: Prebuild on alpine (${{ matrix.arch }})
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: docker/setup-qemu-action@v1
+  #     - run: |
+  #         docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/${{ matrix.arch }} node:16-alpine -c "\
+  #         apk add build-base git python3 curl --update-cache && \
+  #         cd /tmp/project && \
+  #         npm install --ignore-scripts && \
+  #         curl -O https://litesync.io/download/litesync-free-linux-aarch64.tar.gz && \
+  #         tar xf litesync-free-linux-aarch64.tar.gz && \
+  #         sh ./install
+  #         npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
+  #     - name: Upload prebuild
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: prebuild-alpine-${{matrix.arch}}
+  #         path: prebuilds
 
-  prebuild-linux-arm:
+  prebuild-linux-arm64:
     strategy:
       matrix:
         arch:
-          - arm/v7
           - arm64
     name: Prebuild on Linux (${{ matrix.arch }})
     runs-on: ubuntu-latest
@@ -111,6 +110,32 @@ jobs:
           docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/${{ matrix.arch }} node:16 -c "\
           cd /tmp/project && \
           npm install --ignore-scripts && \
+          curl -O https://litesync.io/download/litesync-free-linux-aarch64.tar.gz && \
+          tar xf litesync-free-linux-aarch64.tar.gz && \
+          sh ./install && \
+          npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
+      - name: Upload prebuild
+        uses: actions/upload-artifact@v3
+        with:
+          name: prebuild-${{matrix.os}}
+          path: prebuilds
+  prebuild-linux-armv7:
+    strategy:
+      matrix:
+        arch:
+          - arm/v7
+    name: Prebuild on Linux (${{ matrix.arch }})
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-qemu-action@v1
+      - run: |
+          docker run --rm -v $(pwd):/tmp/project --entrypoint /bin/sh --platform linux/${{ matrix.arch }} node:16 -c "\
+          cd /tmp/project && \
+          npm install --ignore-scripts && \
+          curl -O https://litesync.io/download/litesync-free-linux-armv7.tar.gz && \
+          tar xf litesync-free-linux-armv7.tar.gz && \
+          sh ./install && \
           npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
       - name: Upload prebuild
         uses: actions/upload-artifact@v3

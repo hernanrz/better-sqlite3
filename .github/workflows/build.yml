@@ -39,11 +39,22 @@ jobs:
           tar xf litesync-free-windows-x86_64.tar.gz
       - run: npm install --ignore-scripts
       - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
-      - run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$'
-      - if: matrix.os == 'windows-2019'
-        run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch ia32
+      # - run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$'
+      # - if: matrix.os == 'windows-2019'
+      #   run: |
+      #     curl.exe -O https://litesync.io/download/litesync-free-windows-x86.tar.gz
+      #     cp litesync-free-windows-x86.tar.gz deps
+      #     cd deps
+      #     tar xf litesync-free-windows-x86.tar.gz
+      #     cd ..
+      #     npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch ia32
       - if: matrix.os == 'macos-latest'
-        run: npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch arm64
+        run: |
+          curl.exe -O https://litesync.io/download/litesync-free-mac-arm64.tar.gz
+          cp litesync-free-mac-arm64.tar.gz deps
+          cd deps
+          tar xf litesync-free-mac-arm64.tar.gz
+          npx --no-install prebuild -r electron -t 16.0.0 -t 17.0.0 -t 18.0.0 -t 19.0.0 -t 20.0.0 -t 21.0.0 -t 22.0.0 --include-regex 'better_sqlite3.node$' --arch arm64
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
         with:

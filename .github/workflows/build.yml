@@ -12,7 +12,7 @@ jobs:
         os:
           - windows-2019
           - ubuntu-18.04
-          - macos-latest
+          # - macos-latest
     name: Prebuild on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -62,7 +62,7 @@ jobs:
       - run: |
           curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz
           tar xf litesync-free-linux-x86_64.tar.gz
-          sudo sh ./install
+          sh ./install
       - run: npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
@@ -88,7 +88,7 @@ jobs:
           npm install --ignore-scripts && \
           curl -O https://litesync.io/download/litesync-free-linux-x86_64.tar.gz && \
           tar xf litesync-free-linux-x86_64.tar.gz && \
-          sudo sh ./install
+          sh ./install
           npx --no-install prebuild -r node -t 14.0.0 -t 16.0.0 -t 18.0.0 --include-regex 'better_sqlite3.node$'"
       - name: Upload prebuild
         uses: actions/upload-artifact@v3
